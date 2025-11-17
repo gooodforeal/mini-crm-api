@@ -102,6 +102,76 @@ ruff check app
 ```
 
 ---
+## 🗄️ Схема БД
+
+Ниже показаны ключевые сущности CRM и их связи:
+
+```mermaid
+erDiagram
+    USERS {
+        int id PK
+        string email
+        string hashed_password
+    }
+    ORGANIZATIONS {
+        int id PK
+        string name
+    }
+    ORGANIZATION_MEMBERS {
+        int id PK
+        int organization_id FK
+        int user_id FK
+        enum role
+    }
+    CONTACTS {
+        int id PK
+        int organization_id FK
+        int owner_id FK
+        string name
+    }
+    DEALS {
+        int id PK
+        int organization_id FK
+        int contact_id FK
+        int owner_id FK
+        decimal amount
+        enum status
+        enum stage
+    }
+    TASKS {
+        int id PK
+        int deal_id FK
+        int owner_id FK
+        date due_date
+        bool is_done
+    }
+    ACTIVITIES {
+        int id PK
+        int deal_id FK
+        int author_id FK?
+        enum type
+        json payload
+    }
+
+    USERS ||--o{ ORGANIZATION_MEMBERS : memberships
+    ORGANIZATIONS ||--o{ ORGANIZATION_MEMBERS : members
+    ORGANIZATIONS ||--o{ CONTACTS : contacts
+    USERS ||--o{ CONTACTS : owners
+    ORGANIZATIONS ||--o{ DEALS : deals
+    CONTACTS ||--o{ DEALS : related
+    USERS ||--o{ DEALS : owners
+    DEALS ||--o{ TASKS : tasks
+    USERS ||--o{ TASKS : owners
+    DEALS ||--o{ ACTIVITIES : timeline
+    USERS ||--o{ ACTIVITIES : authors
+```
+
+- `organizations` формируют контур данных; все дочерние записи (контакты, сделки, активности) строго принадлежат организации.
+- `organization_members` связывает пользователей с организациями и хранит роль (`owner`, `admin`, `manager`, `member`), применяемую в проверках доступа.
+- `contacts` и `deals` связаны 1:1 по текущему контакту сделки, а также фиксируют владельца (`owner_id`) для KPI.
+- `tasks` и `activities` наследуют идентификатор сделки, что упрощает построение таймлайна и контроля задач.
+
+---
 ## 🔐 Авторизация
 
 1. `POST /api/v1/auth/login` — передайте JSON:
