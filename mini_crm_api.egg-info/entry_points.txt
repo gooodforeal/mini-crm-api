@@ -1,0 +1,2 @@
+[console_scripts]
+mini-crm = app.cli:app

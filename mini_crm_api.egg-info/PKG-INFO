@@ -1,0 +1,102 @@
+Metadata-Version: 2.4
+Name: mini-crm-api
+Version: 0.1.0
+Summary: Мульти-арендная мини-CRM на FastAPI.
+Author: Test Candidate
+License-Expression: MIT
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: fastapi>=0.110.0
+Requires-Dist: uvicorn[standard]>=0.23.0
+Requires-Dist: pydantic>=2.5.0
+Requires-Dist: pydantic-settings>=2.0.3
+Requires-Dist: SQLAlchemy>=2.0.21
+Requires-Dist: asyncpg>=0.29.0
+Requires-Dist: alembic>=1.12.0
+Requires-Dist: python-jose>=3.3.0
+Requires-Dist: passlib[bcrypt]>=1.7.4
+Requires-Dist: bcrypt>=4.0.1
+Requires-Dist: email-validator>=2.1.0
+Requires-Dist: python-multipart>=0.0.7
+Requires-Dist: redis>=5.0.1
+Requires-Dist: orjson>=3.9.15
+Requires-Dist: fastapi-pagination>=0.12.12
+Requires-Dist: typer>=0.9.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.1; extra == "dev"
+Requires-Dist: httpx>=0.25.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: mypy>=1.6.1; extra == "dev"
+Requires-Dist: ruff>=0.1.7; extra == "dev"
+Requires-Dist: types-python-jose; extra == "dev"
+Requires-Dist: types-passlib; extra == "dev"
+Requires-Dist: faker>=19.0.0; extra == "dev"
+
+# Мини-CRM API
+
+Многопользовательский (multi-tenant) backend-сервис CRM уровня senior на FastAPI + SQLAlchemy.
+
+## Стек
+
+- Python 3.11+
+- FastAPI, Pydantic v2
+- SQLAlchemy 2.0 (async) + PostgreSQL
+- Alembic (миграции)
+- JWT-аутентификация (python-jose)
+- pydantic-settings для конфигурации
+- Кэширование in-memory
+- Pytest, httpx, pytest-asyncio, mypy, ruff
+
+## Запуск
+
+1. Установить зависимости:
+
+```bash
+uv pip install -r requirements.txt
+```
+
+Или через `pip install -e .`.
+
+2. Заполнить `.env` по примеру `.env.example`.
+
+3. Применить миграции:
+
+```bash
+alembic upgrade head
+```
+
+4. Запустить сервер:
+
+```bash
+uvicorn app.main:app --reload
+```
+
+## Тесты
+
+```bash
+pytest
+```
+
+## Структура
+
+- `app/core` – конфигурация, безопасность, кэш
+- `app/db` – база, сессия, миграции
+- `app/models` – ORM-модели
+- `app/repositories` – доступ к данным
+- `app/services` – бизнес-логика и правила
+- `app/api` – FastAPI роуты, схемы запросов/ответов
+- `tests` – unit и интеграционные тесты
+
+## Основные возможности
+
+- Мульти-организации и роли (owner/admin/manager/member)
+- Контакты, сделки, задачи, активити
+- Таймлайн, автоматические события при сменах статусов
+- Аналитика (summary + funnel)
+- JWT access/refresh, role-based permissions
+- Кэширование аналитики
+
+Подробности — в docstring-ах и тестах.
+
+

@@ -1,0 +1,16 @@
+.venv/
+venv/
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+dist/
+build/
+alembic/versions/__pycache__/
+.idea/
+.vscode/
+*.log
+.env
+
+
